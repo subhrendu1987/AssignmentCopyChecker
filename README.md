@@ -2,15 +2,15 @@
 This uses sim_c to check copy in the assignments
 
 ## Download and extract the files
-git clone https://github.com/subhrendu1987/AssignmentCopyChecker.git
-cd AssignmentCopyChecker
+git clone https://github.com/subhrendu1987/AssignmentCopyChecker.git<br>
+cd AssignmentCopyChecker<br>
 ## Compile  sim_c
-cd sim_2_70/
-make test
+cd sim_2_70/<br>
+make test<br>
 
 ## Configure framework
-cd Assignment
-gcc ignoreLine.c -o ignoreLine
+cd Assignment<br>
+gcc ignoreLine.c -o ignoreLine<br>
 
 ## How to use
 * COPY ALL FOLDERS WITH NAME AS ROLL NO IN REPO. FOLDER CONTENT MUST BE EITHER ".c" OR ".h" FILE.
