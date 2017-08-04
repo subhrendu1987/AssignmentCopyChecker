@@ -1,0 +1,60 @@
+File /home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_16.txt: 3827 tokens, 792 lines
+File /home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_25.txt: 3994 tokens, 738 lines
+Total: 7821 tokens
+
+/home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_16.txt consists for 93 % of /home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_25.txt material
+/home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_25.txt consists for 90 % of /home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_16.txt material
+File /home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_16.txt: 3827 tokens, 792 lines
+File /home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_34_lab3.txt: 4260 tokens, 760 lines
+Total: 8087 tokens
+
+/home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_16.txt consists for 68 % of /home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_34_lab3.txt material
+/home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_34_lab3.txt consists for 61 % of /home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_16.txt material
+File /home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_16.txt: 3827 tokens, 792 lines
+File /home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_43.txt: 3991 tokens, 764 lines
+Total: 7818 tokens
+
+/home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_16.txt consists for 93 % of /home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_43.txt material
+/home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_43.txt consists for 91 % of /home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_16.txt material
+File /home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_16.txt: 3827 tokens, 792 lines
+File /home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_7.txt: 3272 tokens, 612 lines
+Total: 7099 tokens
+
+/home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_7.txt consists for 3 % of /home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_16.txt material
+/home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_16.txt consists for 2 % of /home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_7.txt material
+File /home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_25.txt: 3994 tokens, 738 lines
+File /home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_34_lab3.txt: 4260 tokens, 760 lines
+Total: 8254 tokens
+
+/home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_25.txt consists for 68 % of /home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_34_lab3.txt material
+/home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_34_lab3.txt consists for 64 % of /home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_25.txt material
+File /home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_25.txt: 3994 tokens, 738 lines
+File /home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_43.txt: 3991 tokens, 764 lines
+Total: 7985 tokens
+
+/home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_43.txt consists for 100 % of /home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_25.txt material
+/home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_25.txt consists for 99 % of /home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_43.txt material
+File /home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_25.txt: 3994 tokens, 738 lines
+File /home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_7.txt: 3272 tokens, 612 lines
+Total: 7266 tokens
+
+/home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_7.txt consists for 3 % of /home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_25.txt material
+/home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_25.txt consists for 2 % of /home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_7.txt material
+File /home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_34_lab3.txt: 4260 tokens, 760 lines
+File /home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_43.txt: 3991 tokens, 764 lines
+Total: 8251 tokens
+
+/home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_43.txt consists for 68 % of /home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_34_lab3.txt material
+/home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_34_lab3.txt consists for 65 % of /home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_43.txt material
+File /home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_34_lab3.txt: 4260 tokens, 760 lines
+File /home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_7.txt: 3272 tokens, 612 lines
+Total: 7532 tokens
+
+/home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_7.txt consists for 2 % of /home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_34_lab3.txt material
+/home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_34_lab3.txt consists for 1 % of /home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_7.txt material
+File /home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_43.txt: 3991 tokens, 764 lines
+File /home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_7.txt: 3272 tokens, 612 lines
+Total: 7263 tokens
+
+/home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_7.txt consists for 3 % of /home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_43.txt material
+/home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_43.txt consists for 2 % of /home/dick/AssignmentCopyChecker-master/Assignment/codebase/Group_7.txt material

@@ -1,0 +1,764 @@
+// Compile: gcc -Wall -o client client.c
+// Usage: ./client <server-ip> <server-port>
+
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <limits.h>
+#include <assert.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+
+// Definitions
+#define MAX_SIZE 101
+#define BUF_SIZE 1024
+#define MAX_RES_SIZE 96789
+#define MAX_REQ_SIZE 96789
+#define MAX_CMD_SIZE 32
+#define MAX_FIELD_SIZE 32
+const char *end_del = "$$";
+
+// Globals
+// Login details
+static char trader_id[MAX_SIZE];
+static char password[MAX_SIZE];
+static struct sockaddr_in server;
+
+// Prototypes
+void sockaddr_init(const char *ip, int port);
+void request(const char *req, char *res);
+int authenticate(); 
+void prepend_auth(char *req);
+void add_field(char *req, const char *field);
+void end_request(char *req);
+int is_success(const char *res);
+char *seek_res(char *res);
+void print_help();
+int buy_request(char *cmd, int type);
+void view_request(int type);
+void clear_stdin();
+
+
+// Definitions
+// initialize sockaddr structure
+void sockaddr_init(const char *ip, int port) {
+    server.sin_addr.s_addr = inet_addr(ip);
+    server.sin_family = AF_INET;
+    server.sin_port = htons(port);
+}
+
+// send a plaintext request and fetch response
+void request(const char *req, char *res) {
+    int sock = socket(AF_INET, SOCK_STREAM, 0);
+    if(sock == -1) {
+        printf("Unable to create socket\n");
+        exit(-1);
+    }
+
+    if( connect(sock, (struct sockaddr*)&server, sizeof(server)) < 0 ) {
+        printf("Unable to connect to server\n");
+        exit(-1);
+    }
+
+    // printf("D: connected to server\n");
+    // send request data
+    if( send(sock, req, strlen(req), 0) < 0 ) {
+        printf("Unable to send() to server\n");
+        exit(-1);
+    }
+
+    // fetch response data
+    char *buf[BUF_SIZE];
+    int offset = 0;
+    while( 1 ) {
+        int sz = recv(sock, buf, BUF_SIZE, 0);
+        if(sz > 0) {
+            memcpy(res + offset, buf, sz);
+            offset += sz;
+        }
+        else {
+            break;
+        }
+    }
+
+    res[offset] = '\0';
+
+}
+
+void add_field(char *req, const char *field) {
+    strcat(req, field);
+    strcat(req, "\n");
+}
+
+// prepends login details to request string
+
+void prepend_auth(char *req) {
+    add_field(req, trader_id);
+    add_field(req, password);
+}
+
+// add special end delimiter to request string
+
+void end_request(char *req) {
+    strcat(req, end_del);
+}
+
+// checks if response is successful
+
+int is_success(const char *res) {
+    if(memcmp(res, "SUCCESS", 7) == 0) {
+        return 1;
+    }
+    else {
+        return 0;
+    }
+}
+
+// seeks past a field in the response
+
+char *seek_res(char *res) {
+    char *p = res;
+    while(*p != '\n') p++;
+    p++;
+    return p;
+}
+
+// authenticate user
+
+int authenticate(char *res) {
+    char req[MAX_REQ_SIZE];
+    req[0] = '\0';
+    prepend_auth(req);
+    add_field(req, "LOGIN");
+    end_request(req);
+
+ 
+    request(req, res);
+
+    if(is_success(res)) return 1;
+    else return 0;
+}
+
+// print help instructions
+
+void print_help() {
+    printf("List of commands:\n");
+    printf("orders\n");
+    printf("buy\n");
+    printf("sell\n");
+    printf("trades\n");
+    printf("help\n");
+}
+
+// buy/sell request
+
+int bs_request(int item_code, int qty, int unit_price, int type) {
+    char req[MAX_REQ_SIZE];
+    char res[MAX_RES_SIZE];
+    char fld[MAX_FIELD_SIZE];
+    req[0] = '\0';
+    prepend_auth(req);
+    add_field(req, ((type==0)?("BUY"):("SELL")) );
+    sprintf(fld, "%d", item_code);
+    add_field(req, fld);
+    sprintf(fld, "%d", qty);
+    add_field(req, fld);
+    sprintf(fld, "%d", unit_price);
+    add_field(req, fld);
+    end_request(req);
+
+    
+    request(req, res);
+   
+    if(is_success(res)) return 1;
+    else return 0;
+}
+
+void view_request(int type) {
+    char req[MAX_REQ_SIZE];
+    char res[MAX_RES_SIZE];
+    req[0] = '\0';
+    prepend_auth(req);
+    add_field(req, ((type==0)?("VIEW_ORDERS"):("VIEW_TRADES")) );
+    end_request(req);
+
+  
+    request(req, res);
+    
+    if(!is_success(res)) {
+        printf("Request Failed\n");
+        return;
+    }
+
+    printf("%s", seek_res(res)); 
+}
+
+
+int main(int argc, char const *argv[])
+{
+    sockaddr_init(argv[1], atoi(argv[2]));
+
+    // login prompt
+    while( 1 ) {
+        char res[MAX_RES_SIZE];
+        printf("Trader id: ");
+        scanf("%s", trader_id);
+        printf("Password: ");
+        scanf("%s", password);
+
+        if(authenticate(res)) {
+            printf("%s", seek_res(res));
+            break;
+        }
+        else {
+            printf("%s", seek_res(res)); 
+        }
+    }
+
+    print_help();
+
+   
+    while( 1 ) {
+        char cmd[MAX_CMD_SIZE];
+        int item_code, qty, unit_price;
+        printf("trading-sys> ");
+        scanf("%s", cmd);
+        if(strcmp(cmd, "") == 0) continue;
+        else if(strcmp(cmd, "buy") == 0) {
+            printf("Item code: ");
+            scanf("%d", &item_code);
+            printf("Quantity: ");
+            scanf("%d", &qty);
+            printf("Unit Price: ");
+            scanf("%d", &unit_price);
+            bs_request(item_code, qty, unit_price, 0);
+        }
+        else if(strcmp(cmd, "sell") == 0) {
+            printf("Item code: ");
+            scanf("%d", &item_code);
+            printf("Quantity: ");
+            scanf("%d", &qty);
+            printf("Unit Price: ");
+            scanf("%d", &unit_price);
+            bs_request(item_code, qty, unit_price, 1);
+        }
+        else if(strcmp(cmd, "orders") == 0) {
+            view_request(0);
+        }
+        else if(strcmp(cmd, "trades") == 0) {
+            view_request(1);
+        }
+        else if(strcmp(cmd, "help") == 0) {
+            print_help();
+        }
+        else {
+            printf("Invalid command\n");
+        }
+    }
+
+    
+        
+    return 0;
+}
+// Compile: gcc -o server server.h server.c
+// Usage: ./server <server-port>
+
+#include "stdio.h"
+#include <stdlib.h>
+#include "netdb.h"
+#include "netinet/in.h"
+#include "string.h"
+#include "server.h"
+
+
+void writeSocket( int sockfd, char *msg )
+{
+    int n = write( sockfd, msg, strlen(msg) );
+    if (n < 0) {
+         perror("ERROR writing to socket");
+         
+      }
+}
+
+char **split(char *buffer)
+{
+   int l = strlen(buffer), i, tokens=1;
+   for(i=0; i<l; i++)
+      if(buffer[i]=='\n')
+         tokens++;
+   
+   char *tok;
+   char **res;
+   res = (char **)malloc(tokens * sizeof(char *));
+   tok = strtok(buffer, "\n");
+   i=0;
+   while(tok!=NULL)
+   {
+      res[i] = (char *)malloc(sizeof(char)*strlen(tok));
+      strcpy(res[i], tok);
+      i++;
+      tok = strtok(NULL, "\n");
+   }
+   return res;
+}
+
+int authValid( char *username, char *pass, int *userNum )
+{
+    FILE *fp = fopen("login.txt", "r");
+    char buff[50];
+    *userNum=0;
+    while( fgets(  buff, sizeof(buff), fp) != NULL )
+    {
+        *userNum += 1;
+        char *user1 = strtok(buff, ":");
+        char *pass1 = strtok(NULL, "\n");
+        if( strcmp( username, user1) == 0 )
+        {
+            if( strcmp(pass, pass1)==0)
+               return 1;  // 1 means user and pass both match
+            else 
+               return 2;  // 2 means correct user, wrong pass
+        }
+    }
+    return 3;    // 3 means both incorrect
+}
+
+// compare requests
+int rlessthanr(struct request l, struct request r) {
+   if(l.price < r.price) return 1;
+   if(l.price == r.price) {
+      return (l.id < r.id);
+   }
+   return 0;
+}
+
+// swap requests
+void swap_requests(struct request *a, struct request *b) {
+   struct request tmp;
+   tmp = *a;
+   *a = *b;
+   *b = tmp;
+}
+
+// Insert request in sorted order into the rigth queue
+void sortInsert(struct request req) {
+   struct request *arr = ( (req.type=='B')?(buyQueue[req.itemNumber]):(sellQueue[req.itemNumber]) );
+   int *head = ( (req.type == 'B') ? (buyHead + req.itemNumber) : (sellHead + req.itemNumber) );
+   int *tail = ( (req.type == 'B') ? (buyTail + req.itemNumber) : (sellTail + req.itemNumber) );
+
+   if(*head == *tail) {
+      arr[*head] = req;
+      *tail = (*tail + 1)%500;
+   }
+   else {
+      int idx = *head, i;
+      while(!rlessthanr(req, arr[idx]) && idx != *tail) {
+         idx = (idx+1)%500;
+      }
+      // insert element at idx
+      // shift all elements from idx forward
+      struct request temp = req;
+      for(i = idx; i != *tail; i = (i+1)%500 ) {
+         swap_requests(arr+i, &temp);
+      }
+      arr[*tail] = temp;
+      *tail = (*tail + 1)%500;
+   }
+   
+}
+
+// check is sequence of bytes is present in memory buffer
+int memsubstr(const char *buf, int len, const char *seq) {
+   int i;
+   for(i=0; i+strlen(seq) < len ; i++) {
+      if(memcmp(buf + i, seq, strlen(seq)) == 0) {
+         return 1;
+      }
+   }
+   return 0;
+}
+
+
+int main( int argc, char *argv[] ) {
+   int sockfd, sockfd_new, portno, clilen;
+   char buffer[96789];
+   struct sockaddr_in serv_addr, cli_addr;
+   int  n;
+   char ip[] = "127.0.0.1";  
+   
+
+   if(argc<2)
+   {
+      fprintf(stderr,"usage %s port\n", argv[0]);
+      exit(0);
+   }
+   
+
+   //* First call to socket() function *//
+   
+   sockfd = socket(AF_INET, SOCK_STREAM, 0);
+   
+   if (sockfd < 0) {
+      perror("ERROR opening socket");
+      exit(1);
+   }
+   
+   
+   //* Initialize socket structure *//
+   
+   bzero((char *) &serv_addr, sizeof(serv_addr));
+   portno = atoi(argv[1]);
+   
+   serv_addr.sin_family = AF_INET;
+   serv_addr.sin_addr.s_addr = INADDR_ANY;
+   serv_addr.sin_port = htons(portno);
+   
+   /* Now bind the host address using bind() call.*/
+   if (bind(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
+      perror("ERROR on binding");
+      exit(1);
+   }
+      
+ 
+   
+   listen(sockfd,5);
+   clilen = sizeof(cli_addr);
+   
+   while(1)
+   {
+        /* Accept actual connection from the client */
+        sockfd_new = accept(sockfd, (struct sockaddr *)&cli_addr, &clilen);
+        if (sockfd_new < 0) {
+            perror("ERROR on accept");
+            continue;
+        }
+      
+        /* If connection is established then start communicating */
+        char buff[256];
+        int offset = 0;
+        
+        while(1) {
+            memset(buff, '\0', 256);
+            int sz = read( sockfd_new, buff, 256, 0);
+            if(sz < 0) {
+                printf("Error reading from socket\n");
+                exit(-1);
+        }
+        memcpy(buffer+offset, buff, sz);
+        offset += sz;
+        if(memsubstr(buff, 256, "$$")) break;
+    }
+    buffer[offset] = '\0';
+      
+      
+      
+      
+    printf("Here are the messages:\n%s\n",buffer);
+    char **msg = split(buffer);
+      
+      
+    if(strcmp(msg[2], "LOGIN")==0)
+    {
+        
+        int userNum;
+        int res = authValid(msg[0], msg[1], &userNum);
+        switch( res )
+        {
+            case 1:     
+                writeSocket( sockfd_new, "SUCCESS\nlogin Successful!\n") ;
+                break;
+            case 2:     
+                writeSocket(sockfd_new, "FAILUREURE\nInvalid Password\nTry again\n");
+                break;
+            case 3: 
+                writeSocket(sockfd_new, "FAILUREURE\nInvalid username\nTry again\n");
+                break;
+        }
+    }
+    else if(strcmp(msg[2], "BUY")==0)
+    {
+        int userNum;
+        int res = authValid(msg[0], msg[1], &userNum);
+        if(res != 1)
+        {
+            writeSocket( sockfd_new, "FAILURE\nlogin UnSuccessful!\n") ;
+            close(sockfd_new);
+            continue;
+        }
+        
+        /*construct the buy request structure*/
+        int i;
+        int item = atoi( msg[3] );
+        int qty =  atoi( msg[4] );
+        int unitPrice = atoi( msg[5] );
+        struct request buy;
+        strcpy(buy.user, msg[0]);
+        buy.itemNumber = item;
+        buy.qty = qty;
+        buy.price = unitPrice;
+        buy.id = requestID++;
+        buy.type = 'B';
+
+        //add to the initial user request log
+        
+        userRequests[userNum][ nRequest[ userNum ]++ ] = buy;
+
+
+        //check if you get at least one seller
+        
+        int check =0;
+        for(i=sellHead[item]; i != sellTail[item]; i = (i+1)%500)           //check for each pending sell request
+        {
+            if( sellQueue[item][i].price <= unitPrice )                     //if price is compatible
+            {
+                if( sellQueue[item][i].qty >= buy.qty )                     //if the item can be fully purchased
+                {
+                    check = 1;
+                    sellQueue[item][i].qty -= buy.qty;                      //update the initial sell request
+                    if(sellQueue[item][i].qty == 0)                         //if sell qty is zero remove the request
+                        sellHead[item] = (sellHead[item]+1)%500;
+                    
+                    /*update the transaction log*/
+                    
+                    struct userLog tempLog; strcpy(tempLog.buyer, msg[0]); strcpy(tempLog.seller, sellQueue[item][i].user); tempLog.itemNumber = item; 
+                    tempLog.price = sellQueue[item][i].price; tempLog.qty = buy.qty; tempLog.buyRequestID = buy.id; 
+                    tempLog.sellRequestID = sellQueue[item][i].id; tradeLog[nTradeLog++] = tempLog;
+                    break;
+                }
+                else                                                        //the sell qty is less than that of buy
+                {
+                    sellHead[item] = (sellHead[item]+1)%500;                //remove from sell queue
+                    buy.qty -= sellQueue[item][i].qty;                      //update initial request
+
+
+                    /*update the transaction log*/
+                    
+                    struct userLog tempLog; strcpy(tempLog.buyer, msg[0]); strcpy(tempLog.seller, sellQueue[item][i].user); tempLog.itemNumber = item; 
+                    tempLog.price = sellQueue[item][i].price; tempLog.qty = sellQueue[item][i].qty; tempLog.buyRequestID = buy.id; 
+                    tempLog.sellRequestID = sellQueue[item][i].id; tradeLog[nTradeLog++] = tempLog;
+                }
+            }
+        }
+        
+
+        //if no seller found, insert in buy queue
+        if(check == 0)
+            sortInsert(buy);
+        
+        writeSocket(sockfd_new, "SUCCESS\n");
+    }
+    else if(strcmp(msg[2], "SELL")==0)
+    {
+        int userNum;
+        int res = authValid(msg[0], msg[1], &userNum);
+        if(res != 1)
+        {
+            writeSocket( sockfd_new, "FAILURE\nlogin UnSuccessful!\n") ;
+            close(sockfd_new);
+            continue;
+        }
+
+
+        //construct initial sell request
+        int i;
+        int item = atoi( msg[3] );
+        int qty =  atoi( msg[4] );
+        int unitPrice = atoi( msg[5] );
+        struct request sell;
+        strcpy(sell.user, msg[0]);
+        sell.itemNumber = item;
+        sell.qty = qty;
+        sell.price = unitPrice;
+        sell.id = requestID++;
+        sell.type = 'S';
+
+
+        //add to user request log
+        userRequests[userNum][ nRequest[ userNum ]++ ] = sell;
+        
+        while( sell.qty > 0 )
+        {
+            if(buyHead[item] == buyTail[item])          //if no buyer available, add to sell queue
+            {
+                sortInsert(sell);
+                break;
+            }
+            int bestSell = buyHead[item];
+            //find index in buy queue with highest price in FCFS manner
+            for(i=buyHead[item]+1; i != buyTail[item]; i = (i+1)%500)       //check for each sell request pending
+            {
+                if( (buyQueue[item][i].price > buyQueue[item][bestSell].price) || ( (buyQueue[item][i].price == buyQueue[item][bestSell].price) && (buyQueue[item][i].id < buyQueue[item][bestSell].id) ) )
+                    bestSell = i;
+            }
+            if( buyQueue[item][bestSell].price >= sell.price )              //if the price is compatible
+            {
+                if( buyQueue[item][bestSell].qty > sell.qty )               //sell whole amount in request
+                {
+                    buyQueue[item][bestSell].qty -= sell.qty;               //update the buy queue qty
+
+                    /*construct the transaction and update*/
+                    struct userLog tempLog; strcpy(tempLog.seller, msg[0]); strcpy(tempLog.buyer, buyQueue[item][bestSell].user); tempLog.itemNumber = item; 
+
+                    tempLog.price = sell.price; tempLog.qty = sell.qty; tempLog.buyRequestID = buyQueue[item][bestSell].id; 
+
+                    tempLog.sellRequestID = sell.id; tradeLog[nTradeLog++] = tempLog;
+                    
+                    sell.qty = 0;
+                    break;
+                }
+                else                                                        //sell request still remains
+                {
+
+                    sell.qty -= buyQueue[item][bestSell].qty;               //update sell request qty
+
+                    /*update the trransaction log*/
+                    struct userLog tempLog; strcpy(tempLog.seller, msg[0]); strcpy(tempLog.buyer, buyQueue[item][bestSell].user); tempLog.itemNumber = item; 
+
+                    tempLog.price = sell.price; tempLog.qty = buyQueue[item][bestSell].qty; tempLog.buyRequestID = buyQueue[item][bestSell].id; 
+
+                    tempLog.sellRequestID = sell.id; tradeLog[nTradeLog++] = tempLog;
+
+
+                    //remove the entry form buy queue
+                    for( i=bestSell; i!=buyTail[item]; i=(i+1)%500 )
+                        buyQueue[item][i] = buyQueue[item][(i+1)%500];
+                    buyTail[item] = (500+buyTail[item] - 1)%500;
+                }
+            }
+            else                                                            //price not compatible
+            {
+                sortInsert(sell);                                           //add to sell queue
+                break;
+            }
+        }
+        writeSocket(sockfd_new, "SUCCESS\n");
+    }
+    /*display best sell and best buy for each item*/
+    else if(strcmp(msg[2], "VIEW_ORDERS")==0)
+    {
+        int i;
+        char msg[500] = "\0";
+        for(i=0; i<10; i++)
+        {
+            sprintf(msg+strlen(msg), "Item: %d\n", i);
+            strcpy(msg+strlen(msg), "   best sell: ");
+            if( sellHead[i] != sellTail[i] )
+            {
+                sprintf(msg+strlen(msg), "qty- %d",sellQueue[i][sellHead[i]].qty );
+                strcpy(msg+strlen(msg), ", ");
+                sprintf(msg+strlen(msg), "price- %d", sellQueue[i][sellHead[i]].price);
+            }
+            else
+                strcpy(msg+strlen(msg), "NA");
+            strcpy(msg+strlen(msg), "\n");
+              
+            strcpy(msg+strlen(msg), "   best Buy: ");
+            if( buyHead[i] != buyTail[i] )
+            {  
+                sprintf(msg+strlen(msg), "qty- %d", buyQueue[i][(500+buyTail[i]-1)%500].qty);
+                strcpy(msg+strlen(msg), ",");
+                sprintf(msg+strlen(msg), "price- %d", buyQueue[i][(500 + buyTail[i]-1)%500].price);
+            }
+            else
+                strcpy(msg+strlen(msg), "NA");
+            strcpy(msg+strlen(msg), "\n");
+        }
+        writeSocket(sockfd_new, "SUCCESS\n");
+        writeSocket(sockfd_new, msg);
+    }  
+    else if(strcmp(msg[2], "VIEW_TRADES")==0)
+    {
+        int userNum;
+        int res = authValid(msg[0], msg[1], &userNum);
+        printf("%s: %d\n", msg[0], nRequest[userNum]);
+        if(res != 1)
+        {
+            writeSocket( sockfd_new, "FAILURE\nlogin UnSuccessful!\n") ;
+            close(sockfd_new);
+            continue;
+        }
+        char sendMsg[500];
+        writeSocket(sockfd_new, "SUCCESS\n");
+        int i, j;
+        for(j=0; j<nRequest[userNum]; j++)                                  //iterate in all initial requests of a given user
+        {
+            int getBuyID = userRequests[userNum][j].id;                     //get the buy id
+
+            //print the initial request
+            sprintf(sendMsg, "INITIAL REQUEST\n");
+            writeSocket(sockfd_new, sendMsg);
+            
+
+            sprintf(sendMsg, "%s %d %d %d %c %d\n", userRequests[userNum][j].user, userRequests[userNum][j].itemNumber,         userRequests[userNum][j].qty, userRequests[userNum][j].price, userRequests[userNum][j].type, userRequests[userNum][j].id);
+
+
+            writeSocket(sockfd_new, sendMsg);
+
+            sprintf(sendMsg, "(BUYER SELLER ITEM PRICE QTY BUY_REQUEST_ID SELL_REQUEST_ID)\n");
+
+            writeSocket(sockfd_new, sendMsg);
+
+
+
+            for(i=0; i<nTradeLog; i++)                                     
+           {
+                if(tradeLog[i].buyRequestID == getBuyID)                   
+                {
+                    sprintf(sendMsg, "%s %s %d %d %d %d %d\n", tradeLog[i].buyer, tradeLog[i].seller, tradeLog[i].itemNumber, tradeLog[i].qty, tradeLog[i].price, tradeLog[i].buyRequestID, tradeLog[i].sellRequestID);
+                    writeSocket(sockfd_new, sendMsg);
+                }
+
+
+                else if(tradeLog[i].sellRequestID == getBuyID)              //user in question is seller
+                {
+                    sprintf(sendMsg, "%s %s %d %d %d %d %d\n", tradeLog[i].buyer, tradeLog[i].seller, tradeLog[i].itemNumber, tradeLog[i].qty, tradeLog[i].price, tradeLog[i].buyRequestID, tradeLog[i].sellRequestID);
+                    writeSocket(sockfd_new, sendMsg);
+                }
+            }
+        }
+    }  
+    close(sockfd_new);
+   }
+   return 0;
+
+}
+struct request
+{
+    char user[10];
+    int itemNumber;
+    int qty;
+    int price;
+    char type;      
+    int id;
+};
+
+struct userLog      
+{
+    char buyer[10];
+    char seller[10];
+    int itemNumber;
+    int price;
+    int qty;
+    int buyRequestID;
+    int sellRequestID;
+};
+
+struct request userRequests[5][500];
+
+int nRequest[5] = {0};
+
+struct userLog tradeLog[5000]; 
+
+int nTradeLog = 0;
+
+int requestID=0;
+struct request buyQueue[10][500];
+
+struct request sellQueue[10][500];
+
+int buyHead[10]={0}, buyTail[10]={0}, sellHead[10]={0}, sellTail[10]={0};
+
+void sortInsert(struct request);
+
+void removeItem(struct request);
+
