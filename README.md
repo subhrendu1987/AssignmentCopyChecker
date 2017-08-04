@@ -15,10 +15,10 @@ gcc ignoreLine.c -o ignoreLine
 ## How to use
 l. COPY ALL FOLDERS WITH NAME AS ROLL NO IN REPO. FOLDER CONTENT MUST BE EITHER ".c" OR ".h" FILE.
 
-l. RUN FOLLOWING COMMANDS 
-	l. `bash check_c.sh > result/c.txt`
-	l. `bash check_assembly.sh > result/assembly.txt`
-	l. `bash  check_flow.sh > result/flow.txt`
+l. RUN FOLLOWING COMMANDS <br>
+	l. `bash check_c.sh > result/c.txt`<br>
+	l. `bash check_assembly.sh > result/assembly.txt`<br>
+	l. `bash  check_flow.sh > result/flow.txt`<br>
 	
 l. RUN 
 	l. `sort result/c.txt > result/c.sort`
