@@ -13,25 +13,23 @@ CONDENSED_FILE=''
 DIRPATH=''
 rm -f $CODEBASE/*
 # Generate codebase files########################################################
-
 cd $REPO$1
+pwd
 files=`ls $1`
+rename 's/ /_/g' *
 
+files=`ls $1`
 for file in $files; do
         if [ -d $file ];then
           #echo "test"
-          cat $file/*.* > $file$EXTN 
-#          cat $file/*.h 2>/dev/null > $file$EXTN
-#          cat $file/*.c 2>/dev/null >> $file$EXTN
-#          cat $file/*.cpp 2>/dev/null >> $file$EXTN          
+          cat $file/*.* > $file$EXTN
           #echo $file
         fi
 done 
 
 cd ..
 mv $REPO*$EXTN $CODEBASE
-
-
+'
 # Check with sim_c###############################################################
 
 #./sim_c -sep $CODEBASE*$EXTN
@@ -54,3 +52,4 @@ do
 		./../sim_2_70/sim_c -sep $CODEBASE$file1 $CODEBASE$file2
 	done 
 done
+'
