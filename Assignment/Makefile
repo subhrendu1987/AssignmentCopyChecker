@@ -1,7 +1,10 @@
+#May Need to comment some lines from ../SimilarityChecker/Makefile
+# Search define COMMENT in the Makefile
+
 all:
 	gcc ignoreLine.c -o ignoreLine
-	#cd ../sim_2_70/; make test
-	ln -s "$(pwd)"/../sim_2_70/sim_c
+	cd ../SimilarityChecker/; make test
+	ln -sf "$(CURDIR)"/../SimilarityChecker/sim_c
 clean:
 	rm -vf ignoreLine
 	rm -vf sim_c
