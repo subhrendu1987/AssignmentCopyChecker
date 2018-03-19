@@ -61,6 +61,7 @@ do
 	do
 		file2=${list[j]}
 		./sim_c -sep $CODEBASE$file1 $CODEBASE$file2
+		echo "##################################################################"
 	done 
 done
 
