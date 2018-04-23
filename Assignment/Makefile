@@ -5,6 +5,8 @@ all:
 	gcc ignoreLine.c -o ignoreLine
 	cd ../SimilarityChecker/; make test
 	ln -sf "$(CURDIR)"/../SimilarityChecker/sim_c
+	ln -sf "$(CURDIR)"/../SimilarityChecker/sim_c++
+	ln -sf "$(CURDIR)"/../SimilarityChecker/sim_text
 clean:
 	rm -vf ignoreLine
 	rm -vf sim_c
