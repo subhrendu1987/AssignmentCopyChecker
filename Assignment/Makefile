@@ -3,6 +3,7 @@
 
 all:
 	gcc ignoreLine.c -o ignoreLine
+	gcc RemoveComments.c -o RemoveComments
 	cd ../SimilarityChecker/; make test
 	ln -sf "$(CURDIR)"/../SimilarityChecker/sim_c
 	ln -sf "$(CURDIR)"/../SimilarityChecker/sim_c++
