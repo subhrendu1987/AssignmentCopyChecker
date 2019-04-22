@@ -39,6 +39,20 @@ for dir in $files; do
         
 done 
 cd ..
+###############################################################
+### Create un commented version
+files=`ls $CODEBASE$1`
+
+declare -a list
+list=(${files// / })
+
+limit=${#list[@]}
+
+for (( i=0; i<${limit}; i++ ))
+do
+	./RemoveComments $CODEBASE${list[i]}
+done
+
 #mv $REPO*$EXTN 
 
 # Check with sim_c###############################################################
