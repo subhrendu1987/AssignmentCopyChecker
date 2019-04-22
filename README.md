@@ -10,6 +10,9 @@ make
 
 ## How to use
 make fresh
+cd Assignment
+make
+mkdir results; mkdir codebase;
 
 * COPY ALL FOLDERS WITH NAME AS ROLL NO IN REPO. FOLDER CONTENT MUST BE EITHER ".c" OR ".h" FILE.
 
