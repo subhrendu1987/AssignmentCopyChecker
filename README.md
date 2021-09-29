@@ -4,7 +4,9 @@ sim_c requires the follwoing commands for execution</br >
 `gcc, flex, cp, ln, echo, rm, wc`
 ## Download and extract the files
 git clone https://github.com/subhrendu1987/AssignmentCopyChecker.git<br>
-cd AssignmentCopyChecker<br>
+`cd AssignmentCopyChecker`<br>
+`ln ../SimilarityChecker/sim_c++` <br>
+`ln ../SimilarityChecker/sim_c` <br>
 ## Compile  framework
 make
 
