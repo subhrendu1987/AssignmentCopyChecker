@@ -74,3 +74,6 @@ done
 cat $MATCH_FILE | grep "%" > $PERCENTAGE 
 >&2 echo "-------------------"
 
+sed -i 's/ material//g' $PERCENTAGE
+sed -i 's/ consists for /,/g' $PERCENTAGE
+sed -i 's/ of /,/g' $PERCENTAGE
