@@ -1,10 +1,11 @@
 # Important SSH/SFTP commands
-* `sftp -P <PORT_NO> <USERNAME>@<IP>`
-	*`get <REMOTE_FILE_NAME>`:Download to local machine 
-	*`put <LOCAL_FILE_NAME>`:Upload to server
-	*`ls`: Directory in server
-	*`lls`: Directory in local machine
-*`ssh <USERNAME>@<IP> -p <PORT_NO>`
+	* `sftp -P <PORT_NO> <USERNAME>@<IP>`<br>
+		*`get <REMOTE_FILE_NAME>`:Download file to local machine <br>
+		*`put <LOCAL_FILE_NAME>`:Upload file to server<br>
+		*`put -r <LOCAL_DIR_NAME>`:Upload directory to server<br>
+		*`ls`: Directory in server<br>
+		*`lls`: Directory in local machine<br>
+	*`ssh <USERNAME>@<IP> -p <PORT_NO>`
 
 
 
