@@ -26,4 +26,4 @@ mkdir results; mkdir codebase;
 	* `bash check_assembly.sh > result/assembly.txt` not working now <br>
 	* `bash  check_flow.sh > result/flow.txt`not working now <br>
 	
-* Use `./sim_c++ -d <FILE_NAME_A> <FILE_NAME_B>` for pairwise comparison
+* Use `/home/dick/AssignmentCopyChecker/Assignment/sim_c++ -d <FILE_NAME_A> <FILE_NAME_B>` for pairwise comparison

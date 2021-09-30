@@ -3,59 +3,42 @@ import os, sys, argparse, random, re
 def parse_args():
     parser = argparse.ArgumentParser(description="Assignment Checking Reports")
     
-    parser.add_argument('--file', '-F',
+    parser.add_argument('--inputfile', '-F',
                         action="store",
-                        help="Input file from Similarity Checker",
-                        default=None,
-                        required=True)
+                        help="Input report file generated from Similarity Checker",
+                        default="results/Match.csv")
+    parser.add_argument('--outputfile', '-O',
+                        action="store",
+                        help="Input report file generated from Similarity Checker",
+                        default="results/PlagTable.csv")
     
     args = parser.parse_args()
     return args
 #############################################################################
 args=parse_args()
-file_handler=open(args.file,"r")
+file_handler=open(args.inputfile,"r")
 lines=[l.strip() for l in file_handler if len(l)>0]
 file_handler.close()
-report=[]
-for line in lines:
+'''for line in lines:
 	if("consists for" in line and "material" in line):
 		report.append(line)
-for line in report:
-	items=line.split(" ")
+'''
+report={}
+for line in lines:
+	items=line.split(",")
 	items[0]=os.path.basename(items[0])
-	items[6]=os.path.basename(items[6])
-	str1=" ".join(items[0:3])
-	str2="".join(items[3:5])
-	str3=" ".join(items[5:7])
-	print("%s\t%s\t%s"%(str1,str2,str3))
-#############################################################################
-'''
-comment_idx=[idx for idx,l in enumerate(variable) if(l.startswith("#"))]
-group_results=[]
-core_results=[]
-for i,j in zip([0]+comment_idx,comment_idx):
-	res=variable[(i+1):j]
-	if(len(res)!= 5):
-		print("--------------------------------------------------------")
-		print("Some Problem (See lines [%d-%d])"%(i+1,j))
-		file1=os.path.basename(res[0].split(" ")[1])
-		file2=os.path.basename(res[1].split(" ")[1])
-		#print("./sim_[c, c++,t] -sep %s %s"%(res[0].split(" ")[1].replace(":",""),res[1].split(" ")[1].replace(":","")))
-		print("rerun")
-		print(res)
-		print("--------------------------------------------------------")
+	items[1]=int(items[1].replace(" %",""))
+	items[2]=os.path.basename(items[2])
+	if(items[0] in report.keys()):
+		if(report[items[0]]['weight'] < items[1]):
+			report[items[0]]={'key':items[2],'weight':items[1]}
 	else:
-		core_results.append(res[4])
-	group_results.append(res)
+		report[items[0]]={'key':items[2],'weight':items[1]}
 #############################################################################
-if(args.out!=None):
-	f=open(args.out, 'w')
-for res in core_results:
-		if(args.out!=None):
-			print >> f, res
-		else:
-			print res
-if(args.out!=None):
-	f.close()
-'''
-
+file_handler=open(args.outputfile,"w")
+for k in report.keys():
+	entry=','.join([k,report[k]['key'],str(report[k]['weight'])])
+	file_handler.write(entry+"\n")
+file_handler.close()
+#############################################################################
+print("File Created: ", args.outputfile)
