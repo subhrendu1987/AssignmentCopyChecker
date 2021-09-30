@@ -76,6 +76,6 @@ sed -i 's/ consists for /,/g' $PERCENTAGE
 sed -i 's/ of /,/g' $PERCENTAGE
 
 >&2 echo "-------------------"
->&2 echo "Output File ["$PERCENTAGE"]"
-mv $PERCENTAGE $CSV_FILE
+>&2 echo "Output File ["$CSV_FILE"]"
+mv $PERCENTAGE $CSV_FILE    
 >&2 echo "---------Finished Task ----------"
