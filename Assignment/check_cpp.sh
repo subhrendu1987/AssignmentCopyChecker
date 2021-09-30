@@ -7,6 +7,7 @@ CODEBASE='codebase/'
 RESULTS='results/'
 MATCH_FILE=$RESULTS/'Match.txt'
 PERCENTAGE=$RESULTS/'Match.filter'
+CSV_FILE=$RESULTS/'Match.csv'
 #################################################################################
 cf () { 
     for x in $@;
@@ -41,12 +42,8 @@ for dir in $files; do
         
 done 
 cd ..
-#mv $REPO*$EXTN 
-
-# Check with sim_c###############################################################
-
-#./sim_c -sep $CODEBASE*$EXTN
-
+>&2 echo "-------------------"
+>&2 echo "Folder Updated ["$CODEBASE"]"
 date > $MATCH_FILE
 files=`ls $CODEBASE$1`
 
@@ -70,10 +67,15 @@ do
 	done 
 done
 >&2 echo "-------------------"
->&2 echo "Filter Score"
+>&2 echo "Filtered File ["$PERCENTAGE"]"
 cat $MATCH_FILE | grep "%" > $PERCENTAGE 
 >&2 echo "-------------------"
 
 sed -i 's/ material//g' $PERCENTAGE
 sed -i 's/ consists for /,/g' $PERCENTAGE
 sed -i 's/ of /,/g' $PERCENTAGE
+
+>&2 echo "-------------------"
+>&2 echo "Output File ["$PERCENTAGE"]"
+mv $PERCENTAGE $CSV_FILE
+>&2 echo "---------Finished Task ----------"
