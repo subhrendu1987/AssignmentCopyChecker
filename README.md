@@ -22,8 +22,9 @@ mkdir results; mkdir codebase;
 
 * RUN FOLLOWING COMMANDS <br>
 	* `bash check_cpp.sh`<br>
-		* this generates two files `results/Match.txt` and `results/Match.filter`<br>
+		* this generates two files `results/Match.txt` and `results/Match.csv`<br>
+	* `python3.8 Report.py`<br>
+		* this generates `PlagTable.csv` which provides the maximum match percentage of a student with another <br>
 	* `bash check_assembly.sh > result/assembly.txt` not working now <br>
 	* `bash  check_flow.sh > result/flow.txt`not working now <br>
-	
 * Use `/home/dick/AssignmentCopyChecker/Assignment/sim_c++ -d <FILE_NAME_A> <FILE_NAME_B>` for pairwise comparison
