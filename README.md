@@ -26,13 +26,4 @@ mkdir results; mkdir codebase;
 	* `bash check_assembly.sh > result/assembly.txt` not working now <br>
 	* `bash  check_flow.sh > result/flow.txt`not working now <br>
 	
-* RUN <br>
-	* `python Report.py -F "result/cpp.txt" -o "result/cpp.csv" > result/cpp.error`<br>
-	
-* VIEW RESULTS IN THE FILE `result/c.csv`
-
-* CHECK THIS FILES FOR PERCENTAGE OF MATCH. FOR C FILES MATCH MUST NOT BE GREATER THAN 30%.
-
-* `sort result/c.txt > result/c.sort`<br>
-* `./ignoreLine result/c.sort > result/c.csv`<br>
-	
+* Use `./sim_c++ -d <FILE_NAME_A> <FILE_NAME_B>` for pairwise comparison
