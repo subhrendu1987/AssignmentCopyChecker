@@ -19,6 +19,7 @@ make
 mkdir results; mkdir codebase;
 
 * COPY ALL FOLDERS WITH NAME AS ROLL NO IN REPO. FOLDER CONTENT MUST BE EITHER ".c/.cpp/.h/.cpp" FILE.
+* Add the assignments in the `/home/dick/AssignmentCopyChecker/Assignment/repo` and keep a copy of the same in `/home/plagcheck/CSE.206L-2020/<Course_SectionNameSpecificDIrectory`
 
 * RUN FOLLOWING COMMANDS <br>
 	* `bash check_cpp.sh`<br>
