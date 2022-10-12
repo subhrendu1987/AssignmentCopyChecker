@@ -4,6 +4,7 @@
 `sudo docker pull <DockerfileName>`
 ### Create docker Image from Docker file
 `sudo docker build <Dockerfile Location> -t <ImageName>`
+`sudo docker build . -t copycheck`
 
 ## Docker Start up
 ### Docker Start up without TTY (Background)
