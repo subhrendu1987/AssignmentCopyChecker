@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  copychecker:
+    build: .
+    image: assignment-copy-checker:latest
+    container_name: copychecker
+    network_mode: "host"
+    command: "tail -f /dev/null"
+    volumes:
+      - ./:/AssignmentCopyChecker
+      - ./results:/AssignmentCopyChecker/Assignment/results
+      - ./codebase:/AssignmentCopyChecker/Assignment/codebase
+      - ./repo:/AssignmentCopyChecker/Assignment/repo
