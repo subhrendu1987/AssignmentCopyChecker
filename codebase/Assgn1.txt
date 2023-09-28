@@ -1,0 +1,185 @@
+==> standard input <==
+Assgn1/1b.c
+Assgn1/3.c
+Assgn1/2b.c
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <string.h>
+
+//Here defining a LOGFILE which is named as cpu_log.txt
+#define LOG_FILE "cpu_log.txt"
+#define CPU_THRESHOLD 50 
+//CPU Threshold =50 as given in the problem statement
+
+void log_proc(int pid, double cpu_ut) //proc is a process
+//here cpu_ut is a cpu utilization
+{
+    FILE *log_file = fopen(LOG_FILE, "d");
+    if (log_file != NULL) 
+    {
+        time_t s = time(NULL);
+        struct clk *clk_info = localtime(&s);
+        char final_time[20];  //End time
+        strftime(final_time, 20, "%Y-%m-%d %H:%M:%S", clk_dt);
+        fprintf(log_file, "%d,%s,%.2f\n", pid, final_time, cpu_ut);
+        fclose(log_file);
+    } 
+    else
+    {
+        printf("Error: log file cannot be open.\n");
+        //Displaying the result 
+    }
+}
+//Driver Code
+int main() 
+{
+    FILE *chmd_op = popen("ps -eo pid,%cpu --sort=-%cpu", "tm");
+    //popen is used to create a pipe between the "calling program" and the "executed command"
+    //after creating a pipe using popen now it will return a pointer to a stream that can be used to either read from the pipe or write to the pipe
+    if (chmd_op != NULL) 
+    {
+        char line[256];
+        while (fgets(line, sizeof(line), chmd_op) != NULL) 
+        {
+            if (strstr(line, "PID") != NULL) 
+            {
+                continue; // Skip header line
+            }
+
+            int pid; //pid==ProcessID
+            double cpu_ut;
+            if (sscanf(line, "%d %lf", &pid, &cpu_ut) == 2) 
+            {
+                if (cpu_ut > CPU_THRESHOLD) 
+                {
+                    log_proc(pid, cpu_ut);
+                    printf("Proc %d is killed due to high CPU utilization\n", pid); //Here Proc is a process
+                    char kill_chmd[50];
+                    sprintf(kill_chmd, "kill -9 %d", pid);
+                    system(kill_chmd);
+                }
+            }
+        }
+        pclose(chmd_op);
+        //Here this pclose function is used to closes a stream that was opened by popen 
+        //pclose waits for the command specified as an argument in popen() to terminate
+        //after the completion it will return the status of the process that was running the shell command
+        
+    }
+    else 
+    {
+        printf("Error: ps command cannot get run.\n");
+        //Display the result 
+    }
+    
+
+    return 0;
+}#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+
+void count_files_with_A_and_txt() {
+    // Set up pipes
+    int pipe_fd[2];
+    if (pipe(pipe_fd) == -1) {
+        perror("pipe");
+        exit(EXIT_FAILURE);
+    }
+
+    // Fork a child process
+    pid_t child_pid = fork();
+
+    if (child_pid == -1) {
+        perror("fork");
+        exit(EXIT_FAILURE);
+    }
+
+    if (child_pid == 0) {  // Child process
+        // Close the read end of the pipe
+        close(pipe_fd[0]);
+
+        // Redirect stdout to the write end of the pipe
+        dup2(pipe_fd[1], STDOUT_FILENO);
+        close(pipe_fd[1]);
+
+        // Execute the shell command
+        execlp("ls", "ls", "-1", "A*.txt", NULL);
+
+        // If execlp fails
+        perror("execlp");
+        exit(EXIT_FAILURE);
+    } else {  // Parent process
+        // Close the write end of the pipe
+        close(pipe_fd[1]);
+
+        // Redirect stdin to the read end of the pipe
+        dup2(pipe_fd[0], STDIN_FILENO);
+        close(pipe_fd[0]);
+
+        // Execute the shell command 'wc -l'
+        execlp("wc", "wc", "-l", NULL);
+
+        // If execlp fails
+        perror("execlp");
+        exit(EXIT_FAILURE);
+    }
+}
+
+int main() {
+    count_files_with_A_and_txt();
+    return 0;
+}#include <stdio.h>
+#include <stdlib.h>
+
+//ip==INPUT ,cvrt==Convert ,op==OUTPUT
+void cvrt_base(int ip_numb, int ip_base, int cvrt_base, FILE *op_file) 
+{
+    int converted_numb = 0;
+    int multiplier = 1;
+
+    // First we will convert it to decimal
+    while (ip_numb > 0) 
+    {
+        int value = ip_numb % 10;
+        converted_numb += value * multiplier;
+        multiplier *= ip_base;
+        ip_numb /= 10;
+    }
+
+    // after decimal conversion we will convert it to the base
+    char converted_str[32];
+    snprintf(converted_str, sizeof(converted_str), "%X", converted_numb); 
+    
+    fprintf(op_file, "%s\n", converted_str);
+//Display the value
+    
+}
+
+//Driver Code
+int main()
+{
+    FILE *ip_file = fopen("ip_numbers.txt", "r");   //Open the Input File
+    FILE *op_file = fopen("converted_numbers.txt", "w");  //Open the Output File
+
+    if (ip_file == NULL || op_file == NULL) 
+    {
+        printf("Error: Unable to open the files.\n");  
+        //Displaying the result
+        //As input and output file==NULL so we won't be able to open the files
+        return 1;
+    }
+
+    int ip_numb, ip_base, cvrt_base;
+
+    while (fscanf(ip_file, "%d %d %d", &ip_numb, &ip_base, &cvrt_base) == 3)
+    {
+        cvrt_base(ip_numb, ip_base, cvrt_base, op_file);
+    }
+
+    fclose(ip_file);  //Closing the Input File
+    fclose(op_file);  //Closing the Output File
+
+    return 0;
+}END 

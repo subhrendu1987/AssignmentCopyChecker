@@ -1,0 +1,12 @@
+all: shivani  cpu 1b 2A 2b 3 
+
+cpu: cpu.sh   chmod +x cpu.sh  ./cpu.sh
+
+2: 2.sh   chmod +x 2.sh  ./2.sh
+	
+1b: 1b.c
+	gcc 1b.c -o 1b
+2b: 2b.c
+	gcc 2b.c -o 2b
+3: 3.c
+	gcc 3.c -o 3

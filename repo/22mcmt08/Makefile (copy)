@@ -1,0 +1,10 @@
+fileName=main
+CWD=$(PWD)
+
+all:
+	gcc pgm1.c -o pgm1.out 
+	gcc pgm2.c -o pgm2.out 
+	gcc pgm3.c -o pgm3.out
+	
+clean : 
+	rm -f *.out

@@ -23,8 +23,7 @@ sudo docker compose up -d
 sudo docker exec -it copychecker /bin/bash
 ```
 * COPY ALL FOLDERS WITH NAME AS ROLL NO IN REPO. FOLDER CONTENT MUST BE EITHER ".c/.cpp/.h/.cpp" FILE.
-* Add the assignments in the `AssignmentCopyChecker/Assignment/repo` and keep a copy of the same in `/home/plagcheck/CSE.206L-2020/<Course_SectionNameSpecificDIrectory`
-
+* Add the assignments in the `AssignmentCopyChecker/repo`
 * RUN FOLLOWING COMMANDS <br>
 	* `bash check_cpp.sh`<br>
 		* this generates two files `results/Match.txt` and `results/Match.csv`<br>
