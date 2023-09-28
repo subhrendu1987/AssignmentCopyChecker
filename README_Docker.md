@@ -13,9 +13,15 @@ sudo docker compose build
 mkdir results; mkdir codebase; mkdir repo
 ```
 ### Save image
-`sudo docker save assignment-copy-checker > assignment-copy-checker.tar`
+```
+sudo docker save assignment-copy-checker > docker/assignment-copy-checker.tar
+cd docker; split -b 99M assignment-copy-checker.tar assignment-copy-checker.tar.
+```
 ### Load image
-`sudo docker load `
+```
+cd docker; cat assignment-copy-checker.tar.a? > assignment-copy-checker.tar
+sudo docker load assignment-copy-checker.tar
+```
 ## Execute Docker
 ### Start docker
 ```
