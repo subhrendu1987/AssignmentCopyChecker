@@ -61,7 +61,7 @@ do
     for (( j=(i+1); j<${limit}; j++ ))
     do
         file2=${list[j]}
-        ./sim_c++ -sep $CODEBASE$file1 $CODEBASE$file2 >>  $MATCH_FILE
+        ./sim_c -sep $CODEBASE$file1 $CODEBASE$file2 >>  $MATCH_FILE
         echo "Similarity Checking:"
         echo $CODEBASE$file1"-->"$CODEBASE$file2
     done 

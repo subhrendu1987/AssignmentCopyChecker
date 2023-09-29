@@ -1,6 +1,1 @@
-Thu Sep 28 18:08:53 UTC 2023
-File /AssignmentCopyChecker/Assignment/codebase/Assgn1.txt: 606 tokens, 185 lines
-File /AssignmentCopyChecker/Assignment/codebase/OS_LAB.txt: 575 tokens, 159 lines
-Total input: 2 files (2 new, 0 old), 1181 tokens
-
-/AssignmentCopyChecker/Assignment/codebase/Assgn1.txt consists for 22 % of /AssignmentCopyChecker/Assignment/codebase/OS_LAB.txt material
+Fri Sep 29 03:30:09 UTC 2023

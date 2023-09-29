@@ -1,2 +1,0 @@
-Input number: 10 (Base 8)
-Converted number: 8 (Base 10)
