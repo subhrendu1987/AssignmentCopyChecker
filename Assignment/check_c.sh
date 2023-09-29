@@ -78,4 +78,6 @@ sed -i 's/ of /,/g' $PERCENTAGE
 >&2 echo "-------------------"
 >&2 echo "Output File ["$CSV_FILE"]"
 mv $PERCENTAGE $CSV_FILE    
+chmod -Rvf 777 $CODEBASE
+chmod -Rvf 777 $RESULTS
 >&2 echo "---------Finished Task ----------"
