@@ -42,6 +42,8 @@ for dir in $files; do
         
 done 
 cd ..
+
+bash renameCodebaseWithID.sh Folder2ID.csv >&2
 >&2 echo "-------------------"
 >&2 echo "Folder Updated ["$CODEBASE"]"
 date > $MATCH_FILE
