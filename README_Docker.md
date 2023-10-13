@@ -31,7 +31,7 @@ sudo docker exec -it copychecker /bin/bash
 * COPY ALL FOLDERS WITH NAME AS ROLL NO IN REPO. FOLDER CONTENT MUST BE EITHER ".c/.cpp/.h/.cpp" FILE.
 * Add the assignments in the `AssignmentCopyChecker/repo`
 * RUN FOLLOWING COMMANDS <br>
-	* `bash check_cpp.sh`<br>
+	* `cd Assignment; bash check_cpp.sh`<br>
 		* this generates two files `results/Match.txt` and `results/Match.csv`<br>
 	* `python3.8 Report.py`<br>
 		* this generates `PlagTable.csv` which provides the maximum match percentage of a student with another <br>
