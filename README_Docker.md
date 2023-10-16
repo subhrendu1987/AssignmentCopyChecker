@@ -23,12 +23,13 @@ cd docker; cat assignment-copy-checker.tar.a? > assignment-copy-checker.tar
 sudo docker load assignment-copy-checker.tar
 ```
 ## Execute Docker
+* Modify `Folder2ID.csv` to provide name to Roll number mapping. Oterwise, manually save all submission folder with the student Roll number.
 ### Start docker
 ```
 sudo docker compose up -d
 sudo docker exec -it copychecker /bin/bash
 ```
-* COPY ALL FOLDERS WITH NAME AS ROLL NO IN REPO. FOLDER CONTENT MUST BE EITHER ".c/.cpp/.h/.cpp" FILE.
+* FOLDER CONTENT MUST BE EITHER ".c/.cpp/.h/.cpp" FILE.
 * Add the assignments in the `AssignmentCopyChecker/repo`
 * RUN FOLLOWING COMMANDS <br>
 	* `cd Assignment; bash check_cpp.sh`<br>
