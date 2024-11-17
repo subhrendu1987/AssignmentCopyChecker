@@ -31,6 +31,12 @@ mkdir results; mkdir codebase;
 	* `bash check_cpp.sh`<br>
 		* this generates two files `results/Match.txt` and `results/Match.csv`<br>
 	* `python3.8 Report.py`<br>
+
+ ## Use docker
+ ```
+sudo docker-compose up
+sudo docker exec -it copychecker /bin/bash # In a separate terminal
+```
 		* this generates `PlagTable.csv` which provides the maximum match percentage of a student with another <br>
 	* `bash check_assembly.sh > result/assembly.txt` not working now <br>
 	* `bash  check_flow.sh > result/flow.txt`not working now <br>
