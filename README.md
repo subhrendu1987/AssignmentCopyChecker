@@ -52,6 +52,7 @@ cd Assignment/
 # ./sim_c -sep [file1] [file2] >>  [OutputFile]
 
 bash check_c.sh
+# To exit use Ctrl+c and $ sudo docker-compose down
 ```
 ### For help on `sim_c`
 Use `./sim_c -h`; (or) see the following output
