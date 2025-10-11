@@ -38,6 +38,11 @@ mkdir results; mkdir codebase;
 
 
  ## Use docker
+ ### Docker Installation
+```
+https://docs.docker.com/engine/install/ubuntu/
+```
+### Build and Execute 
  ```
 sudo docker-compose up
 sudo docker exec -it copychecker /bin/bash # In a separate terminal
