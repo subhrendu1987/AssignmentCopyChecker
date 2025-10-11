@@ -47,5 +47,44 @@ https://docs.docker.com/engine/install/ubuntu/
 sudo docker-compose up
 sudo docker exec -it copychecker /bin/bash # In a separate terminal
 cd Assignment/
+
+# Simple Usage
+# ./sim_c -sep [file1] [file2] >>  [OutputFile]
+
 bash check_c.sh
+```
+### For help on `sim_c`
+Use `./sim_c -h`; (or) see the following output
+```
+Possible options are:
+	-rN	set minimum run size to N
+
+		output runs as text (default)
+	-d 	output in a diff-like format
+	-n 	suppress the text of the runs
+	-T 	suppress reporting the input files
+	-p 	output similarity in percentages
+	-P 	main contributing file to percentages only
+	-tN	threshold level of percentages
+	-e 	compare each file to each file separately
+
+		compare a file to files after it only (default)
+	-a 	compare to all files
+	-S 	compare to old files only
+	-s 	do not compare a file to itself
+
+		sorted output, most significant first (default)
+	-u 	unbuffered, unsorted output
+
+		miscellaneous options:
+	-f 	function-like forms only
+	-F 	keep function identifiers in tact
+	-R 	recurse into subdirectories
+	-i 	read arguments (file names) from standard input
+	-oF	write output to file F
+	-wN	set page width to N
+	-O 	show command line options at start-up
+	-M 	show memory usage info at close-down
+	-v 	show version number and compilation date
+	-- 	lexical scan output only
 ```
