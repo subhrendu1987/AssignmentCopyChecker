@@ -44,10 +44,14 @@ https://docs.docker.com/engine/install/ubuntu/
 ```
 ### Build and Execute 
  ```
-sudo docker-compose up
+sudo docker-compose up -d  # In daemon mode
+sudo docker compose up -d  # In daemon mode
+
 sudo docker exec -it copychecker /bin/bash # In a separate terminal
 cd Assignment/
-
+```
+#### Place all codes in the `repo` folder 
+```
 # Simple Usage
 # ./sim_c -sep [file1] [file2] >>  [OutputFile]
 
